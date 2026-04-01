@@ -18,7 +18,7 @@ This document ties **interviewer requirements** (Cytonn Software Engineering int
 | 6 | **PATCH `/api/tasks/{id}/status`**: only `pending → in_progress → done` | `TaskController@updateStatus` |
 | 7 | **DELETE `/api/tasks/{id}`**: may remove only **`done`** tasks (**403** otherwise) | **Soft delete** = archive. No role bypass; `TaskPolicy` (visibility) + controller (`status === done`); `SoftDeletes` |
 | 8 | **Bonus:** **GET `/api/tasks/report?date=`** counts per priority × status | `TaskController@report`; excludes soft-deleted rows by default |
-| 9 | README: local run, deploy, example requests | [README.md](../README.md) + [DEPLOYMENT_AND_SUBMISSION.md](DEPLOYMENT_AND_SUBMISSION.md) |
+| 9 | README: local run, deploy, example requests | [README.md](../README.md) (includes first-time `composer install` / `npm install` because `vendor/` and `node_modules/` are not in the archive) |
 | 10 | Host online with MySQL for testing | Candidate deploys; options documented |
 
 **Extensions (beyond minimal PDF):** JWT auth, RBAC, Swagger UI, Vue UI, **archive / restore / permanent delete**, UUID keys, modular Vue components.
@@ -204,6 +204,6 @@ Sanctum migration remains; protected routes use **JWT**.
 
 ## 8. Submission
 
-See **[DEPLOYMENT_AND_SUBMISSION.md](DEPLOYMENT_AND_SUBMISSION.md)** for hosting options, env checklist, and deliverables.
+See **[README.md](../README.md)** (section **Deployment & submission**) for hosting notes and env expectations. After unzipping, run **`composer install`** and **`npm install`** first — **`vendor/`** and **`node_modules/`** are omitted from the archive.
 
 Swagger UI is the **machine-readable** contract; this document is the **human-readable** traceability matrix.

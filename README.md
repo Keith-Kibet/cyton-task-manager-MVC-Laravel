@@ -9,9 +9,23 @@ The `laravel/sanctum` package remains in `composer.json` but **API auth uses JWT
 | Document | Purpose |
 |----------|---------|
 | [docs/BACKEND_DOCUMENTATION.md](docs/BACKEND_DOCUMENTATION.md) | Requirements traceability, API contract, data model |
-| [docs/DEPLOYMENT_AND_SUBMISSION.md](docs/DEPLOYMENT_AND_SUBMISSION.md) | Free hosting options, env checklist, submission checklist |
 
 **IDs:** `users.id` and `tasks.id` are **UUIDs**. After schema changes, run `php artisan migrate` (or `migrate:fresh --seed` in local dev).
+
+---
+
+## What is included vs what you must install
+
+This repository is shipped **without** `vendor/` (Composer) and **without** `node_modules/` (npm), so the archive stays small. **They are not missing by mistake** — restore them before running the app:
+
+| You need on your machine | Purpose |
+|--------------------------|---------|
+| **PHP** (8.2+), **Composer** | `composer install` recreates `vendor/` |
+| **Node.js**, **npm** | `npm install` recreates `node_modules/`; `npm run build` compiles the Vue frontend into `public/build/` |
+
+After `composer install`, all `php artisan …` commands work. After `npm install` and `npm run build`, the web UI and Vite assets load correctly.
+
+---
 
 ---
 
@@ -49,13 +63,13 @@ php artisan l5-swagger:generate
 
 ## Local setup (XAMPP / MySQL)
 
-1. Create a MySQL database (e.g. `task_management`).
-2. Copy `.env.example` to `.env`, run `php artisan key:generate`, set **`JWT_SECRET`** (long random string), and set `DB_*` for MySQL.
-3. Install dependencies and migrate:
+1. **Install PHP dependencies:** from the project root, run `composer install` (creates `vendor/`).
+2. **Install JS dependencies:** run `npm install` (creates `node_modules/`).
+3. Create a MySQL database (e.g. `task_management`).
+4. Copy `.env.example` to `.env`, run `php artisan key:generate`, set **`JWT_SECRET`** (long random string), and set `DB_*` for MySQL.
+5. Build frontend assets and run migrations:
 
 ```bash
-composer install
-npm install
 npm run build
 php artisan migrate --seed
 php artisan serve
@@ -105,7 +119,7 @@ Open **http://127.0.0.1:8000** for the UI. API docs: **`/api/documentation`**.
 
 ## Deployment & submission
 
-See **[docs/DEPLOYMENT_AND_SUBMISSION.md](docs/DEPLOYMENT_AND_SUBMISSION.md)** for free-tier hosting ideas, environment variables, build steps, and what to send to Cytonn.
+On any server or PaaS (e.g. Railway, Render): set the same `.env` variables (MySQL, `APP_KEY`, `JWT_SECRET`), run `composer install --no-dev`, `npm ci` (or `npm install`), `npm run build`, then `php artisan migrate --seed` (or migrate only in production). Ensure the document root points at `public/`. Include **`composer.lock`** in the repo so `composer install` resolves the same versions.
 
 ---
 
